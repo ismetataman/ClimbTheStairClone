@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public float temporaryStamina;
     public float decrementalStamina;
     public float temporaryIncome;
+    public float temporaryMoneyIncrease;
     public float temporaryHoldSpeed;
     public float temporaryClickSpeed;
     public float maxMetre = -500f;
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour
         temporaryHoldSpeed = data.incrementalHoldSpeed;
         temporaryClickSpeed = data.incrementalClickSpeed;
         decrementalStamina = data.decrementalStamina;
+        temporaryMoneyIncrease = data.moneyIncrease;
+
         data.maxStamina = 100f;
     }
 
@@ -91,11 +94,17 @@ public class GameManager : MonoBehaviour
     public void TiredPlayerColor()
     {
         meshRenderer.material.color = Color.Lerp(meshRenderer.material.color, tiredColor, colorLerpTime * Time.deltaTime);
-        changer = Mathf.Lerp(changer,1f,colorLerpTime * Time.deltaTime);
-        if(changer > 0.9f)
+        changer = Mathf.Lerp(changer, 1f, colorLerpTime * Time.deltaTime);
+        if (changer > 0.9f)
         {
             changer = 0;
         }
+    }
+
+    public IEnumerator MoneyIncrease()
+    {
+        yield return new WaitForSeconds(0.5f);
+        temporaryIncome += temporaryMoneyIncrease;
     }
 
 }

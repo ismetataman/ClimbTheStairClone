@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("canRun",true);
             GameManager.instance.MetreDecremental();
             GameManager.instance.StaminaDecrease();
+            StartCoroutine(GameManager.instance.MoneyIncrease());
             if (pathCreator != null)
             {
                 distanceTravelled += GameManager.instance.temporaryHoldSpeed * Time.deltaTime;
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.instance.MetreDecremental();
             GameManager.instance.StaminaDecrease();
+            StartCoroutine(GameManager.instance.MoneyIncrease());
             anim.SetBool("canRun",true);
             if (pathCreator != null)
             {
