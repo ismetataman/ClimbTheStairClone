@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public PathCreator pathCreator;
     public GameObject metreCounter;
     public TextMeshPro metreText;
+    
     public int stairCounter = 0;
     private Rigidbody rb;
     private Animator anim;
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     void PathMovement()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && GameManager.instance.temporaryStamina > 0)
         {
             anim.SetBool("canRun",true);
             GameManager.instance.MetreDecremental();
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
                 transform.eulerAngles = new Vector3(0,transform.eulerAngles.y,0);
             }
         }
-        else if(Input.GetMouseButtonDown(0))
+        else if(Input.GetMouseButtonDown(0) && GameManager.instance.temporaryStamina > 0)
         {
             GameManager.instance.MetreDecremental();
             GameManager.instance.StaminaDecrease();
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
         {
             if(GameManager.instance.temporaryStamina < GameManager.instance.data.maxStamina)
             {
-                GameManager.instance.StaminaIncrease();
+                GameManager.instance.StartCoroutine(GameManager.instance.StaminaInc());
             }
             anim.SetBool("canRun",false);
         }
@@ -77,4 +78,5 @@ public class PlayerController : MonoBehaviour
             metreCounter.transform.position = GameManager.instance.stairs[stairCounter].transform.position + Vector3.up /2;
         }
     }
+
 }

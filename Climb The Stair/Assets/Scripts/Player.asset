@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incrementalStamina: 100
   maxStamina: 100
-  decrementalStamina: 0.5
-  regenerateStamina: 0.1
+  decrementalStamina: 15
+  regenerateStamina: 5
   incrementalIncome: 0
   incrementalHoldSpeed: 1
   incrementalClickSpeed: 4

@@ -6,14 +6,21 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameData data;
+    public ParticleSystem sweat;
     public List<GameObject> stairs = new List<GameObject>();
+    public Color tiredColor;
+    public SkinnedMeshRenderer meshRenderer;
     [Header("Player Variables")]
     public float temporaryStamina;
     public float decrementalStamina;
     public float temporaryIncome;
     public float temporaryHoldSpeed;
     public float temporaryClickSpeed;
-    public float maxMetre = - 500f;
+    public float maxMetre = -500f;
+
+    private float colorLerpTime = 0.5f;
+    private float changer;
+
 
 
     private void Awake()
@@ -22,6 +29,9 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        meshRenderer = GameObject.Find("Player").gameObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
+
+
         temporaryStamina = data.maxStamina;
         temporaryIncome = data.incrementalIncome;
         temporaryHoldSpeed = data.incrementalHoldSpeed;
@@ -45,27 +55,47 @@ public class GameManager : MonoBehaviour
 
     public void StaminaDecrease()
     {
-        if(temporaryStamina > 0)
+        if (temporaryStamina > 0)
         {
-            temporaryStamina -= data.decrementalStamina;
+            temporaryStamina -= data.decrementalStamina * Time.deltaTime;
+            if (temporaryStamina < 30f)
+            {
+                sweat.gameObject.SetActive(true);
+                TiredPlayerColor();
+            }
+            else
+                sweat.gameObject.SetActive(false);   //kontrol et                   
         }
-        else if(temporaryStamina == 0)
+        else if (temporaryStamina == 0)
         {
-            Debug.Log("Stamina Bitti");
+            Debug.Log("Stamina has finished");
         }
-        
+
     }
-    public void StaminaIncrease()
+
+    public IEnumerator StaminaInc()
     {
-        if(temporaryStamina < data.maxStamina )
+        yield return new WaitForSeconds(1.5f);
+        if (temporaryStamina < data.maxStamina)
         {
-            temporaryStamina += data.regenerateStamina;
-            Debug.Log("Stamina Kazanılıyor");
+            temporaryStamina += data.regenerateStamina * Time.deltaTime;
         }
+
     }
 
     public void MetreDecremental()
     {
         maxMetre += 0.05f;
     }
+
+    public void TiredPlayerColor()
+    {
+        meshRenderer.material.color = Color.Lerp(meshRenderer.material.color, tiredColor, colorLerpTime * Time.deltaTime);
+        changer = Mathf.Lerp(changer,1f,colorLerpTime * Time.deltaTime);
+        if(changer > 0.9f)
+        {
+            changer = 0;
+        }
+    }
+
 }
