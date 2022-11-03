@@ -22,4 +22,6 @@ public class GameData : ScriptableObject
     public int incomeCost = 10;
     public int speedLvl = 1;
     public int speedCost = 10;
+    public float maxMetre = -500f;
+    public float limitMetre = 0f;
 }

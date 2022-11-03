@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
             PathMovement();
         }
         Sweating();
-        metreText.text = GameManager.instance.maxMetre.ToString("N1") + "m";
+        metreText.text = GameManager.instance.data.maxMetre.ToString("N1") + "m";
     }
 
     void PathMovement()
@@ -88,6 +88,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+     private bool IsPointerOverUIbject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
     private void Sweating()
     {
         if (GameManager.instance.temporaryStamina < 30)
@@ -99,14 +108,6 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.sweat.gameObject.SetActive(false);
         }
 
-    }
-     private bool IsPointerOverUIbject()
-    {
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        return results.Count > 0;
     }
 
 }

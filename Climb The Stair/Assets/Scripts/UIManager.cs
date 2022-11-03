@@ -13,9 +13,10 @@ public class UIManager : MonoBehaviour
     public int staminaCount = 1, staminaCostCount = 10;
     public int incomeCount = 1, incomeCostCount = 10;
     public int speedCount = 1, speedCostCount = 10;
+    
 
     [SerializeField] Image progressBar;
-    [SerializeField] GameObject progressBarTarget;
+    [SerializeField] GameObject progressBarTarget,bloodParticle;
     [SerializeField] GameObject player;
     [SerializeField] GameObject winScreen, loseScreen, incrementals, tapToStart;
 
@@ -94,7 +95,7 @@ public class UIManager : MonoBehaviour
 
     public void WinScreen()
     {
-        if (GameManager.instance.maxMetre >= 0)
+        if (data.maxMetre >= data.limitMetre)
         {
             GameManager.instance.nextLevel = true;
             winScreen.SetActive(true);
@@ -105,6 +106,8 @@ public class UIManager : MonoBehaviour
         if (GameManager.instance.temporaryStamina <= 0.1f)
         {
             GameManager.instance.sweat.gameObject.SetActive(false);
+            player.transform.GetChild(1).transform.gameObject.SetActive(false);
+            bloodParticle.SetActive(true);
             loseScreen.SetActive(true);
         }
     }
@@ -118,6 +121,8 @@ public class UIManager : MonoBehaviour
     }
     public void NextButton()
     {
+        data.limitMetre += 500f;
+        data.incrementalIncome = GameManager.instance.temporaryIncome;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         GameManager.instance.nextLevel = false;
     }

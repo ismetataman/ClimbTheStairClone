@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameData data;
-    public UIManager uIManager;
     public ParticleSystem sweat;
     public List<GameObject> stairs = new List<GameObject>();
     public Color tiredColor,originalColor;
@@ -19,6 +18,7 @@ public class GameManager : MonoBehaviour
     public float temporaryHoldSpeed;
     public float temporaryClickSpeed;
     public float maxMetre = -500f;
+    public float limitMetre = 0f;
     public bool isFinished = false;
     public bool gameStarted = false;
     public bool nextLevel = false;
@@ -26,15 +26,15 @@ public class GameManager : MonoBehaviour
     private float colorLerpTime = 0.5f;
     private float changer;
 
-
-
     private void Awake()
     {
-        MakeSingleton();
+        instance = this;
+        //MakeSingleton();
     }
     private void Start()
     {
         meshRenderer = GameObject.Find("Player").gameObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
+        sweat = GameObject.Find("Player").gameObject.transform.GetChild(2).GetComponent<ParticleSystem>();
 
         //Player Data Save
         temporaryStamina = data.maxStamina;
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     public void MetreDecremental()
     {
-        maxMetre += 0.05f * temporaryHoldSpeed;
+        data.maxMetre += 0.05f * temporaryHoldSpeed;
     }
 
     public void TiredPlayerColor()
@@ -122,10 +122,10 @@ public class GameManager : MonoBehaviour
         if(temporaryStamina <= 0f)
         {
             isFinished = true;
-            temporaryHoldSpeed = 0f;
-            temporaryClickSpeed = 0f;
             Debug.Log("YOU LOSE");
         }
     }
+
+    
 
 }
