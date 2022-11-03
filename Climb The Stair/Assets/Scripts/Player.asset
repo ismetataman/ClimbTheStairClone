@@ -13,9 +13,16 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   incrementalStamina: 100
-  maxStamina: 200
+  maxStamina: 100
   decrementalStamina: 15
-  regenerateStamina: 5
-  incrementalIncome: 40
+  regenerateStamina: 20
+  incrementalIncome: 0
+  moneyIncrease: 0.2
   incrementalHoldSpeed: 1
   incrementalClickSpeed: 4
+  staminaLvl: 1
+  staminaCost: 10
+  incomeLvl: 1
+  incomeCost: 10
+  speedLvl: 1
+  speedCost: 10

@@ -6,9 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameData data;
+    public UIManager uIManager;
     public ParticleSystem sweat;
     public List<GameObject> stairs = new List<GameObject>();
-    public Color tiredColor;
+    public Color tiredColor,originalColor;
     public SkinnedMeshRenderer meshRenderer;
     [Header("Player Variables")]
     public float temporaryStamina;
@@ -18,6 +19,9 @@ public class GameManager : MonoBehaviour
     public float temporaryHoldSpeed;
     public float temporaryClickSpeed;
     public float maxMetre = -500f;
+    public bool isFinished = false;
+    public bool gameStarted = false;
+    public bool nextLevel = false;
 
     private float colorLerpTime = 0.5f;
     private float changer;
@@ -32,15 +36,17 @@ public class GameManager : MonoBehaviour
     {
         meshRenderer = GameObject.Find("Player").gameObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
 
-
+        //Player Data Save
         temporaryStamina = data.maxStamina;
         temporaryIncome = data.incrementalIncome;
         temporaryHoldSpeed = data.incrementalHoldSpeed;
         temporaryClickSpeed = data.incrementalClickSpeed;
         decrementalStamina = data.decrementalStamina;
         temporaryMoneyIncrease = data.moneyIncrease;
-
-        data.maxStamina = 100f;
+    }
+    private void Update() 
+    {
+        GameLose();
     }
 
     private void MakeSingleton()
@@ -63,11 +69,8 @@ public class GameManager : MonoBehaviour
             temporaryStamina -= data.decrementalStamina * Time.deltaTime;
             if (temporaryStamina < 30f)
             {
-                sweat.gameObject.SetActive(true);
                 TiredPlayerColor();
-            }
-            else
-                sweat.gameObject.SetActive(false);   //kontrol et                   
+            }                
         }
         else if (temporaryStamina == 0)
         {
@@ -83,12 +86,11 @@ public class GameManager : MonoBehaviour
         {
             temporaryStamina += data.regenerateStamina * Time.deltaTime;
         }
-
     }
 
     public void MetreDecremental()
     {
-        maxMetre += 0.05f;
+        maxMetre += 0.05f * temporaryHoldSpeed;
     }
 
     public void TiredPlayerColor()
@@ -101,10 +103,29 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator MoneyIncrease()
+    public void GainStaminaback()
     {
-        yield return new WaitForSeconds(0.5f);
+        meshRenderer.material.color = Color.Lerp(meshRenderer.material.color, originalColor, colorLerpTime * Time.deltaTime);
+        changer = Mathf.Lerp(changer, 1f, colorLerpTime * Time.deltaTime);
+        if (changer > 0.9f)
+        {
+            changer = 0;
+        }
+    }
+
+    public void MoneyIncrease()
+    {
         temporaryIncome += temporaryMoneyIncrease;
+    }
+    public void GameLose()
+    {
+        if(temporaryStamina <= 0f)
+        {
+            isFinished = true;
+            temporaryHoldSpeed = 0f;
+            temporaryClickSpeed = 0f;
+            Debug.Log("YOU LOSE");
+        }
     }
 
 }

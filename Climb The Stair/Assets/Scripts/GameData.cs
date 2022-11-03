@@ -13,4 +13,13 @@ public class GameData : ScriptableObject
     public float moneyIncrease = 0.2f;
     public float incrementalHoldSpeed = 1f;
     public float incrementalClickSpeed = 4f;
+
+    [Header("Incrementals")]
+
+    public int staminaLvl = 1;
+    public int staminaCost = 10;
+    public int incomeLvl = 1;
+    public int incomeCost = 10;
+    public int speedLvl = 1;
+    public int speedCost = 10;
 }
